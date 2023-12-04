@@ -30,8 +30,6 @@ from sklearn.model_selection import learning_curve
 from sklearn.model_selection import train_test_split
 
 
-
-
 def plot_learning_curve(estimator, X, y, cv=None, n_jobs=1):
     """
     绘制学习曲线
@@ -55,7 +53,6 @@ def plot_learning_curve(estimator, X, y, cv=None, n_jobs=1):
     plt.plot(train_sizes, test_scores_mean, label='val score')
     plt.legend()
     plt.show()
-    
 def processing_data(data_path):
    
     """
@@ -65,7 +62,7 @@ def processing_data(data_path):
     """
     feature1,feature2,label = None, None, None
     # -------------------------- 实现数据处理部分代码 ----------------------------
-    #导入医疗数据
+     #导入医疗数据
     data_xls = pd.ExcelFile(data_path)
     data={}
     
@@ -102,7 +99,7 @@ def feature_select(feature1, feature2, label):
     features = pd.concat([feature1, feature2], axis=1)
 
     # 统计特征值和label的皮尔孙相关系数  进行排序筛选特征
-    select_feature_number = 12
+    select_feature_number = 17
     select_features = SelectKBest(lambda X, Y: tuple(map(tuple, np.array(list(map(lambda x: pearsonr(x, Y), X.T))).T)),
                                   k=select_feature_number).fit(features,np.array(label).flatten()).get_support(indices=True)
 
@@ -111,7 +108,6 @@ def feature_select(feature1, feature2, label):
     new_features = features[features.columns.values[select_features]]
     # print(new_features)
     # print("特征 shape: ", new_features.shape)
-
     # ------------------------------------------------------------------------
     # 返回筛选后的数据
     return new_features,label
@@ -126,15 +122,16 @@ def data_split(features,labels):
     
     X_train, X_val, X_test,y_train, y_val, y_test=None, None,None, None, None, None
     # -------------------------- 实现数据切分部分代码 ----------------------------
-    # 将 features 和 label 数据切分成训练集和测试集
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=0, stratify=labels)
+        # 将 features 和 label 数据切分成训练集和测试集
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.25, random_state=0, stratify=labels)
 
     # 将 X_train 和 y_train 进一步切分为训练集和验证集
-    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=0, stratify=y_train)
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=0, stratify=y_train)
     # 显示切分的结果
     print("Training set has {} samples.".format(X_train.shape[0]))
     print("Validation set has {} samples.".format(X_val.shape[0]))
     print("Testing set has {} samples.".format(X_test.shape[0]))
+
     # ------------------------------------------------------------------------
 
     return X_train, X_val, X_test,y_train, y_val, y_test
@@ -150,14 +147,14 @@ def search_model(X_train, y_train,X_val,y_val, model_save_path):
     """
     # --------------------- 实现模型创建、训练、优化和保存等部分的代码 ---------------------
      #创建监督学习模型 以决策树为例
-    clf = tree.DecisionTreeClassifier(random_state=42)
+    clf = tree.DecisionTreeClassifier(random_state=50)
 
     # 创建调节的参数列表
     parameters = {'max_depth': range(5,10),
                   'min_samples_split': range(2,10)}
 
     # 创建一个fbeta_score打分对象 以F-score为例
-    scorer = make_scorer(fbeta_score, beta=1)
+    scorer = make_scorer(fbeta_score, beta=0.5)
 
     # 在分类器上使用网格搜索，使用'scorer'作为评价函数
     kfold = KFold(n_splits=10) #切割成十份
@@ -220,7 +217,6 @@ def load_and_model_prediction(X_test,y_test,save_model_path):
     print ("Accuracy on test data: {:.4f}".format(accuracy_score(y_test, copy_predicts)))
     print ("Recall on test data: {:.4f}".format(recall_score(y_test, copy_predicts)))
     print ("F-score on test data: {:.4f}".format(fbeta_score(y_test, copy_predicts, beta = 1)))
-
     # ---------------------------------------------------------------------------
 
 
@@ -234,11 +230,10 @@ def main():
     """
     data_path = "DataSet.xlsx"  # 数据集路径
     
-    save_model_path = './results/model_2023_12_4_firest_try.m'  # 保存模型路径和名称
+    save_model_path = './results/model_2023_12_4_first_try.m'  # 保存模型路径和名称
 
     # 获取数据 预处理
     feature1,feature2,label = processing_data(data_path)
-
    
     #特征选择
     new_features,label = feature_select(feature1, feature2, label)
