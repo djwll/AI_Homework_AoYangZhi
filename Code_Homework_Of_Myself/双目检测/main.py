@@ -1,5 +1,4 @@
 # 导入相关库
-# 导入相关库
 import warnings
 import itertools
 import numpy as np
@@ -102,7 +101,7 @@ def feature_select(feature1, feature2, label):
     features = pd.concat([feature1, feature2], axis=1)
 
     # 统计特征值和label的皮尔孙相关系数  进行排序筛选特征
-    select_feature_number = 12
+    select_feature_number = 20
     select_features = SelectKBest(lambda X, Y: tuple(map(tuple, np.array(list(map(lambda x: pearsonr(x, Y), X.T))).T)),
                                   k=select_feature_number).fit(features,np.array(label).flatten()).get_support(indices=True)
 
@@ -127,10 +126,10 @@ def data_split(features,labels):
     X_train, X_val, X_test,y_train, y_val, y_test=None, None,None, None, None, None
     # -------------------------- 实现数据切分部分代码 ----------------------------
     # 将 features 和 label 数据切分成训练集和测试集
-    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.2, random_state=0, stratify=labels)
+    X_train, X_test, y_train, y_test = train_test_split(features, labels, test_size=0.25, random_state=0, stratify=labels)
 
     # 将 X_train 和 y_train 进一步切分为训练集和验证集
-    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2, random_state=0, stratify=y_train)
+    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.25, random_state=0, stratify=y_train)
     # 显示切分的结果
     print("Training set has {} samples.".format(X_train.shape[0]))
     print("Validation set has {} samples.".format(X_val.shape[0]))
@@ -234,7 +233,7 @@ def main():
     """
     data_path = "DataSet.xlsx"  # 数据集路径
     
-    save_model_path = './results/model_2023_12_4_firest_try.m'  # 保存模型路径和名称
+    save_model_path = './results/model_2023_12_5_firest_try.m'  # 保存模型路径和名称
 
     # 获取数据 预处理
     feature1,feature2,label = processing_data(data_path)
