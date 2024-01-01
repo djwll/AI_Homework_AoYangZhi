@@ -19,6 +19,7 @@ from mindspore.train.serialization import load_checkpoint, save_checkpoint, expo
 from mindspore.train.callback import Callback, LossMonitor, ModelCheckpoint, CheckpointConfig
 from mindspore.dataset.vision import Normalize, HWC2CHW, Decode, Resize, CenterCrop
 from mindspore.dataset.transforms import TypeCast
+from mindspore.common.initializer import HeNormal
 
 from src_mindspore.dataset import create_dataset # 数据处理脚本
 from src_mindspore.mobilenetv2 import MobileNetV2Backbone, mobilenet_v2 # 模型定义脚本
@@ -47,11 +48,11 @@ config = EasyDict({
     "image_width": 224,
     "batch_size": 24, # 鉴于CPU容器性能，太大可能会导致训练卡住
     "eval_batch_size": 10,
-    "epochs": 4, # 请尝试修改以提升精度
-    "lr_max": 0.01, # 请尝试修改以提升精度
-    "decay_type": 'constant', # 请尝试修改以提升精度
-    "momentum": 0.8, # 请尝试修改以提升精度
-    "weight_decay": 3.0, # 请尝试修改以提升精度
+    "epochs": 25, # 请尝试修改以提升精度
+    "lr_max": 0.1, # 请尝试修改以提升精度
+    "decay_type": 'square', # 请尝试修改以提升精度
+    "momentum": 0.9, # 请尝试修改以提升精度
+    "weight_decay": 0.001, # 请尝试修改以提升精度
     "dataset_path": "./datasets/5fbdf571c06d3433df85ac65-momodel/garbage_26x100",
     "features_path": "./results/garbage_26x100_features", # 临时目录，保存冻结层Feature Map，可随时删除
     "class_index": index,
@@ -61,6 +62,7 @@ config = EasyDict({
     "export_path": './results/mobilenetv2.mindir'
     
 })
+
 
 class GlobalPooling(nn.Cell):
     """
@@ -105,24 +107,44 @@ class MobileNetV2Head(nn.Cell):
         >>> MobileNetV2Head(num_classes=1000)
     """
 
-    def __init__(self, input_channel=1280, hw=7, num_classes=1000, reduction='mean', activation="None"):
+    def __init__(self, input_channel=1280, hw=7, num_classes=1000, reduction='mean', activation="Sigmod", dropout_rate=0.5):
         super(MobileNetV2Head, self).__init__()
         if reduction:
             self.flatten = GlobalPooling(reduction)
         else:
             self.flatten = nn.Flatten()
             input_channel = input_channel * hw * hw
-        self.dense = nn.Dense(input_channel, num_classes, weight_init='ones', has_bias=False)
+        
+        # self.dense = nn.Dense(input_channel, num_classes, weight_init=nn.initializer.HeNormal(), has_bias=False)
+        # self.dense = nn.Dense(input_channel, num_classes, weight_init=HeNormal(), has_bias=False)
+        hidden_units_1 = 256
+        hidden_units_2 = 512
+        hidden_units_3 = 256
+        self.dense1 = nn.Dense(input_channel, hidden_units_1, weight_init=HeNormal(), has_bias=False)
+        self.dense2 = nn.Dense(hidden_units_1, num_classes, weight_init=HeNormal(), has_bias=False)
+        # self.dense3 = nn.Dense(hidden_units_2, hidden_units_3, weight_init=HeNormal(), has_bias=False)
+        # self.dense4 = nn.Dense(hidden_units_3, num_classes, weight_init=HeNormal(), has_bias=False)
+        self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
+        self.softmax = nn.Softmax()
+        # self.bn = nn.BatchNorm2d(num_classes)
+        self.bn = nn.BatchNorm1d(num_classes)
+        self.dropout = nn.Dropout(p=dropout_rate)
         if activation == "Sigmoid":
             self.activation = nn.Sigmoid()
+            self.need_activation = True
         elif activation == "Softmax":
             self.activation = nn.Softmax()
+            self.need_activation = True
         else:
             self.need_activation = False
-
     def construct(self, x):
         x = self.flatten(x)
-        x = self.dense(x)
+        x = self.dense1(x)
+        x = self.softmax(x)
+        x = self.dense2(x)
+        x = self.bn(x)
+        x = self.dropout(x)
         if self.need_activation:
             x = self.activation(x)
         return x
@@ -165,7 +187,7 @@ def infer(images):
 
 CKPT = f'mobilenetv2-{config.epochs}.ckpt'
 test_images = list()
-folder = os.path.join(config.dataset_path, 'val/00_01') # Hats
+folder = os.path.join(config.dataset_path, 'val/00_08') # Hats
 for img in os.listdir(folder):
     test_images.append(os.path.join(folder, img))
 

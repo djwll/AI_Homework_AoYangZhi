@@ -1,0 +1,1886 @@
+# ===============================================================================================
+# The following shows the last analyze fail log message.
+# ===============================================================================================
+
+----------------------------------------------------
+- Caught exception:
+----------------------------------------------------
+External object has no attribute need_activation
+
+----------------------------------------------------
+- C++ Call Stack: (For framework developers)
+----------------------------------------------------
+mindspore\ccsrc\pipeline\jit\ps\static_analysis\prim.cc:1731 mindspore::abstract::`anonymous-namespace'::GetEvaluatedValueForNameSpaceString
+
+----------------------------------------------------
+- The Traceback of Net Construct Code:
+----------------------------------------------------
+# 0 In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:417
+        if not self.sense_flag:
+# 1 In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418
+            return self._no_sens_impl(*inputs)
+                   ^
+# 2 In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437
+        if self.return_grad:
+# 3 In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433
+        loss = self.network(*inputs)
+               ^
+# 4 In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:121
+        out = self._backbone(data)
+              ^
+# 5 In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217
+        if self.need_activation:
+           ^
+
+# ===============================================================================================
+# The following shows the IR when the function graphs evaluation fails to help locate the problem.
+# You can search the last ------------------------> to the node which is evaluated failure.
+# Refer to https://www.mindspore.cn/search?inputValue=analyze_fail.ir to get more instructions.
+# ===============================================================================================
+
+# IR entry: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2
+# Total subgraphs: 64
+
+# Attrs:
+training : 1
+
+# Total params: 7
+# Params:
+%para1_inputs0 : <null>
+%para2_inputs1 : <null>
+%para3_dense.weight : <Ref[Tensor[Float32]], (26, 1280), ref_key=:dense.weight>  :  has_default
+%para4_global_step : <Ref[Tensor[Int32]], (1), ref_key=:global_step>  :  has_default
+%para5_moments.dense.weight : <Ref[Tensor[Float32]], (26, 1280), ref_key=:moments.dense.weight>  :  has_default
+%para6_momentum : <Ref[Tensor[Float32]], (), ref_key=:momentum>  :  has_default
+%para7_learning_rate : <Ref[Tensor[Float32]], (2425), ref_key=:learning_rate>  :  has_default
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2 : 000001EC6D4C1420
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:416/    def construct(self, *inputs):/
+subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2(%para1_inputs0, %para2_inputs1, %para3_dense.weight, %para4_global_step, %para5_moments.dense.weight, %para6_momentum, %para7_learning_rate) {
+
+#------------------------> 0
+  %1(CNode_15) = call @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_3()
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:417/        if not self.sense_flag:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:417/        if not self.sense_flag:/
+}
+# Order:
+#   1: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2:CNode_15{[0]: ValueNode<FuncGraph> mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_3}
+#   2: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2:CNode_16{[0]: ValueNode<Primitive> Return, [1]: CNode_15}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_3 : 000001EC6D4C1970
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:416/    def construct(self, *inputs):/
+subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_3 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2]() {
+  %1(CNode_17) = $(mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2):MakeTuple(%para1_inputs0, %para2_inputs1)
+      : (<Tensor[Float32], (24, 1280, 7, 7)>, <Tensor[Int32], (24)>) -> (<Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:416/    def construct(self, *inputs):/
+
+#------------------------> 1
+  %2(CNode_18) = UnpackCall_unpack_call(@_no_sens_impl_19, %1)
+      : (<Func, NoShape>, <Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418/            return self._no_sens_impl(*inputs)/
+  Return(%2)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418/            return self._no_sens_impl(*inputs)/
+}
+# Order:
+#   1: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_3:CNode_18{[0]: ValueNode<UnpackCall> MetaFuncGraph-unpack_call.20, [1]: ValueNode<FuncGraph> _no_sens_impl_19, [2]: CNode_17}
+#   2: @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_3:CNode_21{[0]: ValueNode<Primitive> Return, [1]: CNode_18}
+
+
+subgraph attr:
+core : 1
+subgraph instance: UnpackCall_4 : 000001EC0DAD7AA0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418/            return self._no_sens_impl(*inputs)/
+subgraph @UnpackCall_4(%para8_, %para9_) {
+  %1(CNode_18) = TupleGetItem(%para9_6, I64(0))
+      : (<Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>, <Int64, NoShape>) -> (<Tensor[Float32], (24, 1280, 7, 7)>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418/            return self._no_sens_impl(*inputs)/
+  %2(CNode_18) = TupleGetItem(%para9_6, I64(1))
+      : (<Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>, <Int64, NoShape>) -> (<Tensor[Int32], (24)>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418/            return self._no_sens_impl(*inputs)/
+
+#------------------------> 2
+  %3(CNode_18) = %para8_5(%1, %2)
+      : (<Tensor[Float32], (24, 1280, 7, 7)>, <Tensor[Int32], (24)>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418/            return self._no_sens_impl(*inputs)/
+  Return(%3)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:418/            return self._no_sens_impl(*inputs)/
+}
+# Order:
+#   1: @UnpackCall_4:CNode_18{[0]: param_5, [1]: CNode_18, [2]: CNode_18}
+#   2: @UnpackCall_4:CNode_18{[0]: ValueNode<Primitive> Return, [1]: CNode_18}
+
+
+subgraph attr:
+training : 1
+subgraph instance: _no_sens_impl_7 : 000001EC0DAD2050
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:431/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_7 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para10_inputs0, %para11_inputs1) {
+
+#------------------------> 3
+  %1(CNode_22) = call @_no_sens_impl_8()
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+}
+# Order:
+#   1: @_no_sens_impl_7:loss{[0]: ValueNode<UnpackCall> MetaFuncGraph-unpack_call.23, [1]: ValueNode<FuncGraph> mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13, [2]: CNode_24}
+#   2: @_no_sens_impl_7:grads{[0]: ValueNode<UnpackGraphPrimitive> UnpackGraph, [1]: ValueNode<FuncGraph> mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13, [2]: CNode_24}
+#   3: @_no_sens_impl_7:grads{[0]: ValueNode<DoSignaturePrimitive> S_Prim_grad, [1]: grads, [2]: CNode_25}
+#   4: @_no_sens_impl_7:grads{[0]: ValueNode<UnpackCall> MetaFuncGraph-unpack_call.26, [1]: grads, [2]: CNode_24}
+#   5: @_no_sens_impl_7:grads{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Identity_construct_27, [1]: grads}
+#   6: @_no_sens_impl_7:CNode_28{[0]: ValueNode<FuncGraph> mindspore_nn_optim_momentum_Momentum_construct_29, [1]: grads}
+#   7: @_no_sens_impl_7:loss{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Depend, [1]: loss, [2]: CNode_28}
+#   8: @_no_sens_impl_7:CNode_22{[0]: ValueNode<FuncGraph> _no_sens_impl_8}
+#   9: @_no_sens_impl_7:CNode_30{[0]: ValueNode<Primitive> Return, [1]: CNode_22}
+
+
+subgraph attr:
+training : 1
+subgraph instance: _no_sens_impl_8 : 000001EC0DAD0070
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:431/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_8 parent: [subgraph @_no_sens_impl_7]() {
+
+#------------------------> 4
+  %1(CNode_31) = call @_no_sens_impl_9()
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+}
+# Order:
+#   1: @_no_sens_impl_8:CNode_31{[0]: ValueNode<FuncGraph> _no_sens_impl_9}
+#   2: @_no_sens_impl_8:CNode_32{[0]: ValueNode<Primitive> Return, [1]: CNode_31}
+
+
+subgraph attr:
+training : 1
+subgraph instance: _no_sens_impl_9 : 000001EC0DAD05C0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:431/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_9 parent: [subgraph @_no_sens_impl_7]() {
+  %1(CNode_24) = $(_no_sens_impl_7):MakeTuple(%para10_inputs0, %para11_inputs1)
+      : (<Tensor[Float32], (24, 1280, 7, 7)>, <Tensor[Int32], (24)>) -> (<Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:431/    def _no_sens_impl(self, *inputs):/
+
+#------------------------> 5
+  %2(loss) = $(_no_sens_impl_7):UnpackCall_unpack_call(@mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13, %1)
+      : (<Func, NoShape>, <Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433/        loss = self.network(*inputs)/
+  %3(grads) = $(_no_sens_impl_7):UnpackGraph(@mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13, %1)
+      : (<null>, <Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %4(CNode_25) = $(_no_sens_impl_7):MakeTuple(%para3_dense.weight)
+      : (<Ref[Tensor[Float32]], (26, 1280)>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %5(grads) = $(_no_sens_impl_7):S_Prim_grad(%3, %4)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %6(grads) = $(_no_sens_impl_7):UnpackCall_unpack_call(%5, %1)
+      : (<null>, <Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %7(grads) = $(_no_sens_impl_7):call @mindspore_nn_layer_basic_Identity_construct_27(%6)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:435/        grads = self.grad_reducer(grads)/
+  %8(CNode_28) = $(_no_sens_impl_7):call @mindspore_nn_optim_momentum_Momentum_construct_29(%7)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:436/        loss = F.depend(loss, self.optimizer(grads))/
+  %9(loss) = $(_no_sens_impl_7):S_Prim_Depend[side_effect_propagate: I64(1)](%2, %8)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:436/        loss = F.depend(loss, self.optimizer(grads))/
+  Return(%9)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442/        return loss/
+}
+# Order:
+#   1: @_no_sens_impl_9:CNode_33{[0]: ValueNode<Primitive> Return, [1]: loss}
+
+
+subgraph attr:
+core : 1
+subgraph instance: UnpackCall_10 : 000001EC7307D550
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433/        loss = self.network(*inputs)/
+subgraph @UnpackCall_10(%para12_, %para13_) {
+  %1(loss) = TupleGetItem(%para13_12, I64(0))
+      : (<Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>, <Int64, NoShape>) -> (<Tensor[Float32], (24, 1280, 7, 7)>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433/        loss = self.network(*inputs)/
+  %2(loss) = TupleGetItem(%para13_12, I64(1))
+      : (<Tuple[Tensor[Float32],Tensor[Int32]], TupleShape((24, 1280, 7, 7), (24))>, <Int64, NoShape>) -> (<Tensor[Int32], (24)>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433/        loss = self.network(*inputs)/
+
+#------------------------> 6
+  %3(loss) = %para12_11(%1, %2)
+      : (<Tensor[Float32], (24, 1280, 7, 7)>, <Tensor[Int32], (24)>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433/        loss = self.network(*inputs)/
+  Return(%3)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433/        loss = self.network(*inputs)/
+}
+# Order:
+#   1: @UnpackCall_10:loss{[0]: param_11, [1]: loss, [2]: loss}
+#   2: @UnpackCall_10:loss{[0]: ValueNode<Primitive> Return, [1]: loss}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13 : 000001EC0DAD5570
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:120/    def construct(self, data, label):/
+subgraph @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para14_data, %para15_label) {
+
+#------------------------> 7
+  %1(out) = call @__main___MobileNetV2Head_construct_14(%para14_data)
+      : (<Tensor[Float32], (24, 1280, 7, 7)>) -> (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:121/        out = self._backbone(data)/
+  %2(CNode_35) = call @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_34(%1, %para15_label)
+      : (<null>, <Tensor[Int32], (24)>) -> (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:122/        return self._loss_fn(out, label)/
+  Return(%2)
+      : (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:122/        return self._loss_fn(out, label)/
+}
+# Order:
+#   1: @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13:out{[0]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_14, [1]: param_data}
+#   2: @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13:CNode_35{[0]: ValueNode<FuncGraph> mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_34, [1]: out, [2]: param_label}
+#   3: @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_13:CNode_36{[0]: ValueNode<Primitive> Return, [1]: CNode_35}
+
+
+subgraph attr:
+training : 1
+subgraph instance: __main___MobileNetV2Head_construct_14 : 000001EC0DAD2AF0
+# In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:214/    def construct(self, x):/
+subgraph @__main___MobileNetV2Head_construct_14 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para16_x) {
+
+#------------------------> 8
+  %1(CNode_37) = resolve(ClassMember, need_activation)
+      : (<External, NoShape>, <External, NoShape>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %2(CNode_38) = Cond(%1, Bool(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %3(CNode_39) = Switch(%2, @__main___MobileNetV2Head_construct_40, @__main___MobileNetV2Head_construct_41)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %4(CNode_42) = %3()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %5(CNode_44) = call @__main___MobileNetV2Head_construct_43(%4)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:121/        out = self._backbone(data)/
+  Return(%5)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+}
+# Order:
+#   1: @__main___MobileNetV2Head_construct_14:x{[0]: ValueNode<FuncGraph> __main___GlobalPooling_construct_45, [1]: param_x}
+#   2: @__main___MobileNetV2Head_construct_14:x{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_46, [1]: x}
+#   3: @__main___MobileNetV2Head_construct_14:CNode_37{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:__main__..<MobileNetV2Head::2113373821264>', [2]: ValueNode<Symbol> need_activation}
+#   4: @__main___MobileNetV2Head_construct_14:CNode_38{[0]: ValueNode<Primitive> Cond, [1]: CNode_37, [2]: ValueNode<BoolImm> false}
+#   5: @__main___MobileNetV2Head_construct_14:CNode_39{[0]: ValueNode<Primitive> Switch, [1]: CNode_38, [2]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_40, [3]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_41}
+#   6: @__main___MobileNetV2Head_construct_14:CNode_42{[0]: CNode_39}
+#   7: @__main___MobileNetV2Head_construct_14:CNode_44{[0]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_43, [1]: CNode_42}
+#   8: @__main___MobileNetV2Head_construct_14:CNode_47{[0]: ValueNode<Primitive> Return, [1]: CNode_44}
+
+
+# ===============================================================================================
+# The total of function graphs in evaluation stack: 9
+# ===============================================================================================
+
+
+# ===============================================================================================
+# The rest function graphs are the following:
+# ===============================================================================================
+subgraph attr:
+training : 1
+subgraph instance: _no_sens_impl_19 : 000001EC6D4C2410
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:431/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_19 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para17_inputs) {
+  %1(CNode_22) = call @_no_sens_impl_48()
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+}
+# Order:
+#   1: @_no_sens_impl_19:loss{[0]: ValueNode<UnpackCall> MetaFuncGraph-unpack_call.23, [1]: ValueNode<FuncGraph> mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49, [2]: param_inputs}
+#   2: @_no_sens_impl_19:grads{[0]: ValueNode<UnpackGraphPrimitive> UnpackGraph, [1]: ValueNode<FuncGraph> mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49, [2]: param_inputs}
+#   3: @_no_sens_impl_19:grads{[0]: ValueNode<DoSignaturePrimitive> S_Prim_grad, [1]: grads, [2]: CNode_25}
+#   4: @_no_sens_impl_19:grads{[0]: ValueNode<UnpackCall> MetaFuncGraph-unpack_call.26, [1]: grads, [2]: param_inputs}
+#   5: @_no_sens_impl_19:grads{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Identity_construct_50, [1]: grads}
+#   6: @_no_sens_impl_19:CNode_28{[0]: ValueNode<FuncGraph> mindspore_nn_optim_momentum_Momentum_construct_51, [1]: grads}
+#   7: @_no_sens_impl_19:loss{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Depend, [1]: loss, [2]: CNode_28}
+#   8: @_no_sens_impl_19:CNode_22{[0]: ValueNode<FuncGraph> _no_sens_impl_48}
+#   9: @_no_sens_impl_19:CNode_30{[0]: ValueNode<Primitive> Return, [1]: CNode_22}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: mindspore_nn_optim_momentum_Momentum_construct_51 : 000001EC6D4C2960
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:215/    def construct(self, gradients):/
+subgraph @mindspore_nn_optim_momentum_Momentum_construct_51 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para18_gradients) {
+  %1(CNode_52) = S_Prim_AssignAdd[input_names: ["ref", "value"], output_names: ["ref"], side_effect_mem: Bool(1)](%para4_global_step, Tensor(shape=[1], dtype=Int32, value=[1]))
+      : (<Ref[Tensor[Int32]], (1), ref_key=:global_step>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:223/        self.assignadd(self.global_step, self.global_step_increase_tensor)/
+  %2(CNode_53) = StopGradient(%1)
+      : (<null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:214/    @jit/
+  %3(CNode_55) = call @mindspore_nn_optim_momentum_Momentum_construct_54()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:224/        if self.use_dist_optimizer:/
+  %4(CNode_56) = Depend[side_effect_propagate: I64(1)](%3, %2)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:224/        if self.use_dist_optimizer:/
+  Return(%4)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:224/        if self.use_dist_optimizer:/
+}
+# Order:
+#   1: @mindspore_nn_optim_momentum_Momentum_construct_51:gradients{[0]: ValueNode<FuncGraph> flatten_gradients_57, [1]: param_gradients}
+#   2: @mindspore_nn_optim_momentum_Momentum_construct_51:gradients{[0]: ValueNode<FuncGraph> decay_weight_58, [1]: gradients}
+#   3: @mindspore_nn_optim_momentum_Momentum_construct_51:gradients{[0]: ValueNode<FuncGraph> gradients_centralization_59, [1]: gradients}
+#   4: @mindspore_nn_optim_momentum_Momentum_construct_51:gradients{[0]: ValueNode<FuncGraph> scale_grad_60, [1]: gradients}
+#   5: @mindspore_nn_optim_momentum_Momentum_construct_51:lr{[0]: ValueNode<FuncGraph> get_lr_61}
+#   6: @mindspore_nn_optim_momentum_Momentum_construct_51:CNode_52{[0]: ValueNode<DoSignaturePrimitive> S_Prim_AssignAdd, [1]: param_global_step, [2]: ValueNode<Tensor> Tensor(shape=[1], dtype=Int32, value=[1])}
+#   7: @mindspore_nn_optim_momentum_Momentum_construct_51:CNode_55{[0]: ValueNode<FuncGraph> mindspore_nn_optim_momentum_Momentum_construct_54}
+#   8: @mindspore_nn_optim_momentum_Momentum_construct_51:CNode_62{[0]: ValueNode<Primitive> Return, [1]: CNode_56}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Identity_construct_50 : 000001EC6D4C3400
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:505/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Identity_construct_50(%para19_x) {
+  Return(%para19_x)
+      : (<null>)
+      #scope: (Default/grad_reducer-Identity)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:506/        return x/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Identity_construct_50:CNode_63{[0]: ValueNode<Primitive> Return, [1]: param_x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49 : 000001EC48002E80
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:120/    def construct(self, data, label):/
+subgraph @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para20_data, %para21_label) {
+  %1(out) = call @__main___MobileNetV2Head_construct_64(%para20_data)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:121/        out = self._backbone(data)/
+  %2(CNode_35) = call @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65(%1, %para21_label)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:122/        return self._loss_fn(out, label)/
+  Return(%2)
+      : (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:122/        return self._loss_fn(out, label)/
+}
+# Order:
+#   1: @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49:out{[0]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_64, [1]: param_data}
+#   2: @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49:CNode_35{[0]: ValueNode<FuncGraph> mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65, [1]: out, [2]: param_label}
+#   3: @mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49:CNode_36{[0]: ValueNode<Primitive> Return, [1]: CNode_35}
+
+
+subgraph attr:
+training : 1
+subgraph instance: _no_sens_impl_48 : 000001EC0DAD0B10
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:431/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_48 parent: [subgraph @_no_sens_impl_19]() {
+  %1(CNode_31) = call @_no_sens_impl_66()
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:437/        if self.return_grad:/
+}
+# Order:
+#   1: @_no_sens_impl_48:CNode_31{[0]: ValueNode<FuncGraph> _no_sens_impl_66}
+#   2: @_no_sens_impl_48:CNode_32{[0]: ValueNode<Primitive> Return, [1]: CNode_31}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: scale_grad_60 : 000001EC0AA3F240
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:471/    def scale_grad(self, gradients):/
+subgraph @scale_grad_60(%para22_gradients) {
+  %1(CNode_68) = call @scale_grad_67()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:485/        if self.need_scale:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:485/        if self.need_scale:/
+}
+# Order:
+#   1: @scale_grad_60:CNode_68{[0]: ValueNode<FuncGraph> scale_grad_67}
+#   2: @scale_grad_60:CNode_69{[0]: ValueNode<Primitive> Return, [1]: CNode_68}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: gradients_centralization_59 : 000001EC6C4475B0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:452/    def gradients_centralization(self, gradients):/
+subgraph @gradients_centralization_59(%para23_gradients) {
+  %1(CNode_71) = call @gradients_centralization_70()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:466/        if self.is_group:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:466/        if self.is_group:/
+}
+# Order:
+#   1: @gradients_centralization_59:CNode_71{[0]: ValueNode<FuncGraph> gradients_centralization_70}
+#   2: @gradients_centralization_59:CNode_72{[0]: ValueNode<Primitive> Return, [1]: CNode_71}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: decay_weight_58 : 000001EC6D4C1EC0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:429/    def decay_weight(self, gradients):/
+subgraph @decay_weight_58 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para24_gradients) {
+  %1(CNode_74) = call @decay_weight_73()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:442/        if self.exec_weight_decay:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:442/        if self.exec_weight_decay:/
+}
+# Order:
+#   1: @decay_weight_58:CNode_74{[0]: ValueNode<FuncGraph> decay_weight_73}
+#   2: @decay_weight_58:CNode_75{[0]: ValueNode<Primitive> Return, [1]: CNode_74}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: flatten_gradients_57 : 000001EC6D4C2EB0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:410/    def flatten_gradients(self, gradients):/
+subgraph @flatten_gradients_57(%para25_gradients) {
+  %1(CNode_77) = call @flatten_gradients_76()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:424/        if self._use_flattened_params:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:424/        if self._use_flattened_params:/
+}
+# Order:
+#   1: @flatten_gradients_57:CNode_77{[0]: ValueNode<FuncGraph> flatten_gradients_76}
+#   2: @flatten_gradients_57:CNode_78{[0]: ValueNode<Primitive> Return, [1]: CNode_77}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_lr_61 : 000001EC6C446070
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:739/    def get_lr(self):/
+subgraph @get_lr_61 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2]() {
+  %1(CNode_80) = call @get_lr_79()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:748/        if self.dynamic_lr:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:748/        if self.dynamic_lr:/
+}
+# Order:
+#   1: @get_lr_61:CNode_80{[0]: ValueNode<FuncGraph> get_lr_79}
+#   2: @get_lr_61:CNode_81{[0]: ValueNode<Primitive> Return, [1]: CNode_80}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: mindspore_nn_optim_momentum_Momentum_construct_54 : 000001EC48003920
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:215/    def construct(self, gradients):/
+subgraph @mindspore_nn_optim_momentum_Momentum_construct_54 parent: [subgraph @mindspore_nn_optim_momentum_Momentum_construct_51]() {
+  %1(CNode_83) = call @mindspore_nn_optim_momentum_Momentum_construct_82()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:234/            if self.is_group_lr:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:234/            if self.is_group_lr:/
+}
+# Order:
+#   1: @mindspore_nn_optim_momentum_Momentum_construct_54:CNode_83{[0]: ValueNode<FuncGraph> mindspore_nn_optim_momentum_Momentum_construct_82}
+#   2: @mindspore_nn_optim_momentum_Momentum_construct_54:CNode_84{[0]: ValueNode<Primitive> Return, [1]: CNode_83}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65 : 000001EC0786B5D0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65(%para26_logits, %para27_labels) {
+  %1(CNode_85) = S_Prim__check_is_tensor[constexpr_prim: Bool(1)]("logits", %para26_logits, "SoftmaxCrossEntropyWithLogits")
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:778/        _check_is_tensor('logits', logits, self.cls_name)/
+  %2(CNode_86) = S_Prim__check_is_tensor[constexpr_prim: Bool(1)]("labels", %para27_labels, "SoftmaxCrossEntropyWithLogits")
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:779/        _check_is_tensor('labels', labels, self.cls_name)/
+  %3(CNode_87) = MakeTuple(%1, %2)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+  %4(CNode_88) = StopGradient(%3)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+  %5(CNode_90) = call @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:780/        if self.sparse:/
+  %6(CNode_91) = Depend[side_effect_propagate: I64(1)](%5, %4)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:780/        if self.sparse:/
+  Return(%6)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:780/        if self.sparse:/
+}
+# Order:
+#   1: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65:CNode_85{[0]: ValueNode<DoSignaturePrimitive> S_Prim__check_is_tensor, [1]: ValueNode<StringImm> logits, [2]: param_logits, [3]: ValueNode<StringImm> SoftmaxCrossEntropyWithLogits}
+#   2: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65:CNode_86{[0]: ValueNode<DoSignaturePrimitive> S_Prim__check_is_tensor, [1]: ValueNode<StringImm> labels, [2]: param_labels, [3]: ValueNode<StringImm> SoftmaxCrossEntropyWithLogits}
+#   3: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65:CNode_90{[0]: ValueNode<FuncGraph> mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89}
+#   4: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65:CNode_92{[0]: ValueNode<Primitive> Return, [1]: CNode_91}
+
+
+subgraph attr:
+training : 1
+subgraph instance: __main___MobileNetV2Head_construct_64 : 000001EC48003E70
+# In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:214/    def construct(self, x):/
+subgraph @__main___MobileNetV2Head_construct_64 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para28_x) {
+  %1(CNode_37) = resolve(ClassMember, need_activation)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %2(CNode_38) = Cond(%1, Bool(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %3(CNode_39) = Switch(%2, @__main___MobileNetV2Head_construct_93, @__main___MobileNetV2Head_construct_94)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %4(CNode_42) = %3()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+  %5(CNode_44) = call @__main___MobileNetV2Head_construct_95(%4)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:121/        out = self._backbone(data)/
+  Return(%5)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+}
+# Order:
+#   1: @__main___MobileNetV2Head_construct_64:x{[0]: ValueNode<FuncGraph> __main___GlobalPooling_construct_96, [1]: param_x}
+#   2: @__main___MobileNetV2Head_construct_64:x{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_97, [1]: x}
+#   3: @__main___MobileNetV2Head_construct_64:CNode_37{[0]: ValueNode<Primitive> resolve, [1]: ValueNode<NameSpace> ClassMember: 'Namespace:__main__..<MobileNetV2Head::2113373821264>', [2]: ValueNode<Symbol> need_activation}
+#   4: @__main___MobileNetV2Head_construct_64:CNode_38{[0]: ValueNode<Primitive> Cond, [1]: CNode_37, [2]: ValueNode<BoolImm> false}
+#   5: @__main___MobileNetV2Head_construct_64:CNode_39{[0]: ValueNode<Primitive> Switch, [1]: CNode_38, [2]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_93, [3]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_94}
+#   6: @__main___MobileNetV2Head_construct_64:CNode_42{[0]: CNode_39}
+#   7: @__main___MobileNetV2Head_construct_64:CNode_44{[0]: ValueNode<FuncGraph> __main___MobileNetV2Head_construct_95, [1]: CNode_42}
+#   8: @__main___MobileNetV2Head_construct_64:CNode_47{[0]: ValueNode<Primitive> Return, [1]: CNode_44}
+
+
+subgraph attr:
+training : 1
+subgraph instance: _no_sens_impl_66 : 000001EC0DAD25A0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:431/    def _no_sens_impl(self, *inputs):/
+subgraph @_no_sens_impl_66 parent: [subgraph @_no_sens_impl_19]() {
+  %1(loss) = $(_no_sens_impl_19):UnpackCall_unpack_call(@mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49, %para17_inputs)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:433/        loss = self.network(*inputs)/
+  %2(grads) = $(_no_sens_impl_19):UnpackGraph(@mindspore_nn_wrap_cell_wrapper_WithLossCell_construct_49, %para17_inputs)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %3(CNode_25) = $(_no_sens_impl_19):MakeTuple(%para3_dense.weight)
+      : (<Ref[Tensor[Float32]], (26, 1280), ref_key=:dense.weight>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %4(grads) = $(_no_sens_impl_19):S_Prim_grad(%2, %3)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %5(grads) = $(_no_sens_impl_19):UnpackCall_unpack_call(%4, %para17_inputs)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:434/        grads = self.grad_no_sens(self.network, self.weights)(*inputs)/
+  %6(grads) = $(_no_sens_impl_19):call @mindspore_nn_layer_basic_Identity_construct_50(%5)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:435/        grads = self.grad_reducer(grads)/
+  %7(CNode_28) = $(_no_sens_impl_19):call @mindspore_nn_optim_momentum_Momentum_construct_51(%6)
+      : (<null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:436/        loss = F.depend(loss, self.optimizer(grads))/
+  %8(loss) = $(_no_sens_impl_19):S_Prim_Depend[side_effect_propagate: I64(1)](%1, %7)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:436/        loss = F.depend(loss, self.optimizer(grads))/
+  Return(%8)
+      : (<null>)
+      #scope: (Default)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\wrap\cell_wrapper.py:442/        return loss/
+}
+# Order:
+#   1: @_no_sens_impl_66:CNode_33{[0]: ValueNode<Primitive> Return, [1]: loss}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: scale_grad_67 : 000001EC0AA3FCE0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:471/    def scale_grad(self, gradients):/
+subgraph @scale_grad_67 parent: [subgraph @scale_grad_60]() {
+  %1(CNode_99) = call @scale_grad_98()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:485/        if self.need_scale:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:485/        if self.need_scale:/
+}
+# Order:
+#   1: @scale_grad_67:CNode_99{[0]: ValueNode<FuncGraph> scale_grad_98}
+#   2: @scale_grad_67:CNode_100{[0]: ValueNode<Primitive> Return, [1]: CNode_99}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: gradients_centralization_70 : 000001EC6C447B00
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:452/    def gradients_centralization(self, gradients):/
+subgraph @gradients_centralization_70 parent: [subgraph @gradients_centralization_59]() {
+  %1(CNode_102) = call @gradients_centralization_101()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:466/        if self.is_group:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:466/        if self.is_group:/
+}
+# Order:
+#   1: @gradients_centralization_70:CNode_102{[0]: ValueNode<FuncGraph> gradients_centralization_101}
+#   2: @gradients_centralization_70:CNode_103{[0]: ValueNode<Primitive> Return, [1]: CNode_102}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: decay_weight_73 : 000001EC6D4C0980
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:429/    def decay_weight(self, gradients):/
+subgraph @decay_weight_73 parent: [subgraph @decay_weight_58]() {
+  %1(CNode_105) = call @decay_weight_104()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:445/            if self.is_group:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:445/            if self.is_group:/
+}
+# Order:
+#   1: @decay_weight_73:weight_decay{[0]: ValueNode<FuncGraph> get_weight_decay_106}
+#   2: @decay_weight_73:CNode_105{[0]: ValueNode<FuncGraph> decay_weight_104}
+#   3: @decay_weight_73:CNode_107{[0]: ValueNode<Primitive> Return, [1]: CNode_105}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: flatten_gradients_76 : 000001EC6D4C3950
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:410/    def flatten_gradients(self, gradients):/
+subgraph @flatten_gradients_76 parent: [subgraph @flatten_gradients_57]() {
+  %1(CNode_109) = call @flatten_gradients_108()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:424/        if self._use_flattened_params:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:424/        if self._use_flattened_params:/
+}
+# Order:
+#   1: @flatten_gradients_76:CNode_109{[0]: ValueNode<FuncGraph> flatten_gradients_108}
+#   2: @flatten_gradients_76:CNode_110{[0]: ValueNode<Primitive> Return, [1]: CNode_109}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_lr_79 : 000001EC6C4465C0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:739/    def get_lr(self):/
+subgraph @get_lr_79 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2]() {
+  %1(CNode_112) = call @get_lr_111()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:749/            if self.is_group_lr:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:749/            if self.is_group_lr:/
+}
+# Order:
+#   1: @get_lr_79:CNode_112{[0]: ValueNode<FuncGraph> get_lr_111}
+#   2: @get_lr_79:CNode_113{[0]: ValueNode<Primitive> Return, [1]: CNode_112}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: mindspore_nn_optim_momentum_Momentum_construct_82 : 000001EC48001E90
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:215/    def construct(self, gradients):/
+subgraph @mindspore_nn_optim_momentum_Momentum_construct_82 parent: [subgraph @mindspore_nn_optim_momentum_Momentum_construct_51]() {
+  %1(CNode_115) = call @mindspore_nn_optim_momentum_Momentum_construct_114()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:238/                success = self.hyper_map_reverse(F.partial(_momentum_opt, self.opt, self.momentum, lr),/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:238/                success = self.hyper_map_reverse(F.partial(_momentum_opt, self.opt, self.momentum, lr),/
+}
+# Order:
+#   1: @mindspore_nn_optim_momentum_Momentum_construct_82:CNode_116{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Partial, [1]: ValueNode<DoSignaturePrimitive> S_Prim_momentum_opt, [2]: ValueNode<DoSignaturePrimitive> S_Prim_ApplyMomentum, [3]: param_momentum, [4]: lr}
+#   2: @mindspore_nn_optim_momentum_Momentum_construct_82:success{[0]: ValueNode<DoSignaturePrimitive> S_Prim_hyper_map, [1]: CNode_116, [2]: gradients, [3]: CNode_117, [4]: CNode_118, [5]: ValueNode<ValueTuple> (false), [6]: ValueNode<ValueTuple> (false)}
+#   3: @mindspore_nn_optim_momentum_Momentum_construct_82:CNode_115{[0]: ValueNode<FuncGraph> mindspore_nn_optim_momentum_Momentum_construct_114}
+#   4: @mindspore_nn_optim_momentum_Momentum_construct_82:CNode_119{[0]: ValueNode<Primitive> Return, [1]: CNode_115}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89 : 000001EC07866B70
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89 parent: [subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65]() {
+  %1(CNode_120) = S_Prim_equal("mean", "mean")
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+  %2(CNode_121) = Cond(%1, Bool(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+  %3(CNode_122) = Switch(%2, @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_123, @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_124)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+  %4(CNode_125) = %3()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+  Return(%4)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+}
+# Order:
+#   1: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89:CNode_120{[0]: ValueNode<DoSignaturePrimitive> S_Prim_equal, [1]: ValueNode<StringImm> mean, [2]: ValueNode<StringImm> mean}
+#   2: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89:CNode_121{[0]: ValueNode<Primitive> Cond, [1]: CNode_120, [2]: ValueNode<BoolImm> false}
+#   3: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89:CNode_122{[0]: ValueNode<Primitive> Switch, [1]: CNode_121, [2]: ValueNode<FuncGraph> mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_123, [3]: ValueNode<FuncGraph> mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_124}
+#   4: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89:CNode_125{[0]: CNode_122}
+#   5: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_89:CNode_126{[0]: ValueNode<Primitive> Return, [1]: CNode_125}
+
+
+subgraph attr:
+training : 1
+after_block : 1
+subgraph instance: __main___MobileNetV2Head_construct_95 : 000001EC0786B080
+# In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:214/    def construct(self, x):/
+subgraph @__main___MobileNetV2Head_construct_95(%para29_) {
+  Return(%para29_phi_x)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:219/        return x/
+}
+# Order:
+#   1: @__main___MobileNetV2Head_construct_95:CNode_127{[0]: ValueNode<Primitive> Return, [1]: param_phi_x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_97 : 000001EC48000EA0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_97 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para30_x) {
+  %1(x_shape) = S_Prim_Shape(%para30_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:623/        x_shape = self.shape_op(x)/
+  %2(CNode_128) = S_Prim_check_dense_input_shape[constexpr_prim: Bool(1)](%1, "Dense")
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:624/        check_dense_input_shape(x_shape, self.cls_name)/
+  %3(CNode_129) = StopGradient(%2)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+  %4(CNode_130) = S_Prim_inner_len(%1)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:625/        if len(x_shape) != 2:/
+  %5(CNode_131) = S_Prim_not_equal(%4, I64(2))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:625/        if len(x_shape) != 2:/
+  %6(CNode_132) = Cond(%5, Bool(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:625/        if len(x_shape) != 2:/
+  %7(CNode_133) = Switch(%6, @mindspore_nn_layer_basic_Dense_construct_134, @mindspore_nn_layer_basic_Dense_construct_135)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:625/        if len(x_shape) != 2:/
+  %8(CNode_136) = %7()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:625/        if len(x_shape) != 2:/
+  %9(CNode_138) = call @mindspore_nn_layer_basic_Dense_construct_137(%8)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:216/        x = self.dense(x)/
+  %10(CNode_139) = Depend[side_effect_propagate: I64(1)](%9, %3)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:216/        x = self.dense(x)/
+  Return(%10)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:625/        if len(x_shape) != 2:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_97:x_shape{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Shape, [1]: param_x}
+#   2: @mindspore_nn_layer_basic_Dense_construct_97:CNode_128{[0]: ValueNode<DoSignaturePrimitive> S_Prim_check_dense_input_shape, [1]: x_shape, [2]: ValueNode<StringImm> Dense}
+#   3: @mindspore_nn_layer_basic_Dense_construct_97:CNode_130{[0]: ValueNode<DoSignaturePrimitive> S_Prim_inner_len, [1]: x_shape}
+#   4: @mindspore_nn_layer_basic_Dense_construct_97:CNode_131{[0]: ValueNode<DoSignaturePrimitive> S_Prim_not_equal, [1]: CNode_130, [2]: ValueNode<Int64Imm> 2}
+#   5: @mindspore_nn_layer_basic_Dense_construct_97:CNode_132{[0]: ValueNode<Primitive> Cond, [1]: CNode_131, [2]: ValueNode<BoolImm> false}
+#   6: @mindspore_nn_layer_basic_Dense_construct_97:CNode_133{[0]: ValueNode<Primitive> Switch, [1]: CNode_132, [2]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_134, [3]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_135}
+#   7: @mindspore_nn_layer_basic_Dense_construct_97:CNode_136{[0]: CNode_133}
+#   8: @mindspore_nn_layer_basic_Dense_construct_97:CNode_138{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_137, [1]: CNode_136}
+#   9: @mindspore_nn_layer_basic_Dense_construct_97:CNode_139{[0]: ValueNode<Primitive> Depend, [1]: CNode_138, [2]: CNode_129}
+#  10: @mindspore_nn_layer_basic_Dense_construct_97:CNode_140{[0]: ValueNode<Primitive> Return, [1]: CNode_139}
+
+
+subgraph attr:
+training : 1
+subgraph instance: __main___GlobalPooling_construct_96 : 000001EC480043C0
+# In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:176/    def construct(self, x):/
+subgraph @__main___GlobalPooling_construct_96(%para31_x) {
+  %1(CNode_141) = S_Prim_MakeTuple(I64(2), I64(3))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/flatten-GlobalPooling)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:177/        x = self.mean(x, (2, 3))/
+  %2(x) = S_Prim_ReduceMean[keep_dims: Bool(0), input_names: ["input_x", "axis"], output_names: ["y"]](%para31_x, %1)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/flatten-GlobalPooling)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:177/        x = self.mean(x, (2, 3))/
+  Return(%2)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/flatten-GlobalPooling)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:178/        return x/
+}
+# Order:
+#   1: @__main___GlobalPooling_construct_96:CNode_141{[0]: ValueNode<DoSignaturePrimitive> S_Prim_MakeTuple, [1]: ValueNode<Int64Imm> 2, [2]: ValueNode<Int64Imm> 3}
+#   2: @__main___GlobalPooling_construct_96:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_ReduceMean, [1]: param_x, [2]: CNode_141}
+#   3: @__main___GlobalPooling_construct_96:CNode_142{[0]: ValueNode<Primitive> Return, [1]: x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: __main___MobileNetV2Head_construct_93 : 000001EC07864640
+# In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:214/    def construct(self, x):/
+subgraph @__main___MobileNetV2Head_construct_93 parent: [subgraph @__main___MobileNetV2Head_construct_64]() {
+  %1(x) = $(__main___MobileNetV2Head_construct_64):call @__main___GlobalPooling_construct_96(%para28_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:215/        x = self.flatten(x)/
+  %2(x) = $(__main___MobileNetV2Head_construct_64):call @mindspore_nn_layer_basic_Dense_construct_97(%1)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:216/        x = self.dense(x)/
+  %3(x) = call @mindspore_nn_layer_activation_Sigmoid_construct_143(%2)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:218/            x = self.activation(x)/
+  Return(%3)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:218/            x = self.activation(x)/
+}
+# Order:
+#   1: @__main___MobileNetV2Head_construct_93:x{[0]: ValueNode<FuncGraph> mindspore_nn_layer_activation_Sigmoid_construct_143, [1]: x}
+#   2: @__main___MobileNetV2Head_construct_93:CNode_144{[0]: ValueNode<Primitive> Return, [1]: x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: __main___MobileNetV2Head_construct_94 : 000001EC07865630
+# In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:214/    def construct(self, x):/
+subgraph @__main___MobileNetV2Head_construct_94 parent: [subgraph @__main___MobileNetV2Head_construct_64]() {
+  %1(x) = $(__main___MobileNetV2Head_construct_64):call @__main___GlobalPooling_construct_96(%para28_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:215/        x = self.flatten(x)/
+  %2(x) = $(__main___MobileNetV2Head_construct_64):call @mindspore_nn_layer_basic_Dense_construct_97(%1)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:216/        x = self.dense(x)/
+  Return(%2)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:217/        if self.need_activation:/
+}
+# Order:
+#   1: @__main___MobileNetV2Head_construct_94:CNode_145{[0]: ValueNode<Primitive> Return, [1]: x}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: scale_grad_98 : 000001EC480033D0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:471/    def scale_grad(self, gradients):/
+subgraph @scale_grad_98 parent: [subgraph @scale_grad_60]() {
+  Return(%para22_gradients)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:488/        return gradients/
+}
+# Order:
+#   1: @scale_grad_98:CNode_146{[0]: ValueNode<Primitive> Return, [1]: param_gradients}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: gradients_centralization_101 : 000001EC6C445080
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:452/    def gradients_centralization(self, gradients):/
+subgraph @gradients_centralization_101 parent: [subgraph @gradients_centralization_59]() {
+  Return(%para23_gradients)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:469/        return gradients/
+}
+# Order:
+#   1: @gradients_centralization_101:CNode_147{[0]: ValueNode<Primitive> Return, [1]: param_gradients}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_weight_decay_106 : 000001EC6D4C0ED0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:720/    def get_weight_decay(self):/
+subgraph @get_weight_decay_106() {
+  %1(CNode_149) = call @get_weight_decay_148()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:729/        if self.dynamic_weight_decay:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:729/        if self.dynamic_weight_decay:/
+}
+# Order:
+#   1: @get_weight_decay_106:CNode_149{[0]: ValueNode<FuncGraph> get_weight_decay_148}
+#   2: @get_weight_decay_106:CNode_150{[0]: ValueNode<Primitive> Return, [1]: CNode_149}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: decay_weight_104 : 000001EC6C445B20
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:429/    def decay_weight(self, gradients):/
+subgraph @decay_weight_104 parent: [subgraph @decay_weight_73]() {
+  %1(CNode_152) = call @decay_weight_151()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:448/                gradients = self.map_(F.partial(_apply_decay, weight_decay), self.decay_flags, params, gradients)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:448/                gradients = self.map_(F.partial(_apply_decay, weight_decay), self.decay_flags, params, gradients)/
+}
+# Order:
+#   1: @decay_weight_104:CNode_153{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Partial, [1]: ValueNode<DoSignaturePrimitive> S_Prim_apply_decay, [2]: weight_decay}
+#   2: @decay_weight_104:gradients{[0]: ValueNode<DoSignaturePrimitive> S_Prim_map, [1]: CNode_153, [2]: ValueNode<ValueTuple> (true), [3]: CNode_154, [4]: param_gradients}
+#   3: @decay_weight_104:CNode_152{[0]: ValueNode<FuncGraph> decay_weight_151}
+#   4: @decay_weight_104:CNode_155{[0]: ValueNode<Primitive> Return, [1]: CNode_152}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: flatten_gradients_108 : 000001EC6D4C3EA0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:410/    def flatten_gradients(self, gradients):/
+subgraph @flatten_gradients_108 parent: [subgraph @flatten_gradients_57]() {
+  Return(%para25_gradients)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:427/        return gradients/
+}
+# Order:
+#   1: @flatten_gradients_108:CNode_156{[0]: ValueNode<Primitive> Return, [1]: param_gradients}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_lr_111 : 000001EC6C446B10
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:739/    def get_lr(self):/
+subgraph @get_lr_111 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2]() {
+  %1(CNode_158) = call @get_lr_157()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:755/                lr = self.learning_rate(self.global_step).reshape(())/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:755/                lr = self.learning_rate(self.global_step).reshape(())/
+}
+# Order:
+#   1: @get_lr_111:CNode_159{[0]: ValueNode<FuncGraph> mindspore_nn_optim_optimizer__IteratorLearningRate_construct_160, [1]: param_global_step}
+#   2: @get_lr_111:CNode_161{[0]: ValueNode<Primitive> getattr, [1]: CNode_159, [2]: ValueNode<StringImm> reshape}
+#   3: @get_lr_111:lr{[0]: CNode_161, [1]: ValueNode<ValueTuple> ()}
+#   4: @get_lr_111:CNode_158{[0]: ValueNode<FuncGraph> get_lr_157}
+#   5: @get_lr_111:CNode_162{[0]: ValueNode<Primitive> Return, [1]: CNode_158}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: mindspore_nn_optim_momentum_Momentum_construct_114 : 000001EC480023E0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:215/    def construct(self, gradients):/
+subgraph @mindspore_nn_optim_momentum_Momentum_construct_114 parent: [subgraph @mindspore_nn_optim_momentum_Momentum_construct_82]() {
+  %1(CNode_164) = call @mindspore_nn_optim_momentum_Momentum_construct_163()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:234/            if self.is_group_lr:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:234/            if self.is_group_lr:/
+}
+# Order:
+#   1: @mindspore_nn_optim_momentum_Momentum_construct_114:CNode_164{[0]: ValueNode<FuncGraph> mindspore_nn_optim_momentum_Momentum_construct_163}
+#   2: @mindspore_nn_optim_momentum_Momentum_construct_114:CNode_165{[0]: ValueNode<Primitive> Return, [1]: CNode_164}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_123 : 000001EC0DAD7000
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_123 parent: [subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65]() {
+  %1(x) = S_Prim_SparseSoftmaxCrossEntropyWithLogits[is_grad: Bool(0), sens: F32(1), input_names: ["features", "labels"], output_names: ["output"]](%para26_logits, %para27_labels)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:782/                x = self.sparse_softmax_cross_entropy(logits, labels)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:783/                return x/
+}
+# Order:
+#   1: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_123:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_SparseSoftmaxCrossEntropyWithLogits, [1]: param_logits, [2]: param_labels}
+#   2: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_123:CNode_166{[0]: ValueNode<Primitive> Return, [1]: x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_124 : 000001EC078640F0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_124 parent: [subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65]() {
+  %1(CNode_168) = call @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+}
+# Order:
+#   1: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_124:CNode_168{[0]: ValueNode<FuncGraph> mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167}
+#   2: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_124:CNode_169{[0]: ValueNode<Primitive> Return, [1]: CNode_168}
+
+
+subgraph attr:
+training : 1
+after_block : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_137 : 000001EC078695F0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_137 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_97](%para32_) {
+  %1(CNode_171) = call @mindspore_nn_layer_basic_Dense_construct_170()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:628/        if self.has_bias:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:628/        if self.has_bias:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_137:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_MatMul, [1]: param_phi_x, [2]: param_dense.weight}
+#   2: @mindspore_nn_layer_basic_Dense_construct_137:CNode_171{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_170}
+#   3: @mindspore_nn_layer_basic_Dense_construct_137:CNode_172{[0]: ValueNode<Primitive> Return, [1]: CNode_171}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_134 : 000001EC480013F0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_134 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_97]() {
+  %1(CNode_173) = S_Prim_negative(I64(1))
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:626/            x = self.reshape(x, (-1, x_shape[-1]))/
+  %2(x_shape) = $(mindspore_nn_layer_basic_Dense_construct_97):S_Prim_Shape(%para30_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:623/        x_shape = self.shape_op(x)/
+  %3(CNode_174) = S_Prim_negative(I64(1))
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:626/            x = self.reshape(x, (-1, x_shape[-1]))/
+  %4(CNode_175) = S_Prim_getitem(%2, %3)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:626/            x = self.reshape(x, (-1, x_shape[-1]))/
+  %5(CNode_176) = S_Prim_MakeTuple(%1, %4)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:626/            x = self.reshape(x, (-1, x_shape[-1]))/
+  %6(x) = S_Prim_Reshape[input_names: ["tensor", "shape"], output_names: ["output"]](%para30_x, %5)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:626/            x = self.reshape(x, (-1, x_shape[-1]))/
+  Return(%6)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:626/            x = self.reshape(x, (-1, x_shape[-1]))/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_134:CNode_173{[0]: ValueNode<DoSignaturePrimitive> S_Prim_negative, [1]: ValueNode<Int64Imm> 1}
+#   2: @mindspore_nn_layer_basic_Dense_construct_134:CNode_174{[0]: ValueNode<DoSignaturePrimitive> S_Prim_negative, [1]: ValueNode<Int64Imm> 1}
+#   3: @mindspore_nn_layer_basic_Dense_construct_134:CNode_175{[0]: ValueNode<DoSignaturePrimitive> S_Prim_getitem, [1]: x_shape, [2]: CNode_174}
+#   4: @mindspore_nn_layer_basic_Dense_construct_134:CNode_176{[0]: ValueNode<DoSignaturePrimitive> S_Prim_MakeTuple, [1]: CNode_173, [2]: CNode_175}
+#   5: @mindspore_nn_layer_basic_Dense_construct_134:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Reshape, [1]: param_x, [2]: CNode_176}
+#   6: @mindspore_nn_layer_basic_Dense_construct_134:CNode_177{[0]: ValueNode<Primitive> Return, [1]: x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_135 : 000001EC48001940
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_135 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_97]() {
+  Return(%para30_x)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:625/        if len(x_shape) != 2:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_135:CNode_178{[0]: ValueNode<Primitive> Return, [1]: param_x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_activation_Sigmoid_construct_143 : 000001EC0786AB30
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\activation.py:1045/    def construct(self, x):/
+subgraph @mindspore_nn_layer_activation_Sigmoid_construct_143(%para33_x) {
+  %1(CNode_179) = S_Prim_Sigmoid[input_names: ["x"], output_names: ["output"]](%para33_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/activation-Sigmoid)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\activation.py:1046/        return self.sigmoid(x)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/activation-Sigmoid)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\activation.py:1046/        return self.sigmoid(x)/
+}
+# Order:
+#   1: @mindspore_nn_layer_activation_Sigmoid_construct_143:CNode_179{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Sigmoid, [1]: param_x}
+#   2: @mindspore_nn_layer_activation_Sigmoid_construct_143:CNode_180{[0]: ValueNode<Primitive> Return, [1]: CNode_179}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_weight_decay_148 : 000001EC6C448050
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:720/    def get_weight_decay(self):/
+subgraph @get_weight_decay_148() {
+  %1(CNode_182) = call @get_weight_decay_181()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:729/        if self.dynamic_weight_decay:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:729/        if self.dynamic_weight_decay:/
+}
+# Order:
+#   1: @get_weight_decay_148:CNode_182{[0]: ValueNode<FuncGraph> get_weight_decay_181}
+#   2: @get_weight_decay_148:CNode_183{[0]: ValueNode<Primitive> Return, [1]: CNode_182}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: decay_weight_151 : 000001EC6C4485A0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:429/    def decay_weight(self, gradients):/
+subgraph @decay_weight_151 parent: [subgraph @decay_weight_104]() {
+  %1(CNode_185) = call @decay_weight_184()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:443/            params = self._parameters/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:443/            params = self._parameters/
+}
+# Order:
+#   1: @decay_weight_151:CNode_185{[0]: ValueNode<FuncGraph> decay_weight_184}
+#   2: @decay_weight_151:CNode_186{[0]: ValueNode<Primitive> Return, [1]: CNode_185}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_optim_optimizer__IteratorLearningRate_construct_160 : 000001EC0AA3F790
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:1018/    def construct(self, global_step):/
+subgraph @mindspore_nn_optim_optimizer__IteratorLearningRate_construct_160 parent: [subgraph @mindspore_nn_wrap_cell_wrapper_TrainOneStepCell_construct_2](%para34_global_step) {
+  %1(CNode_187) = S_Prim_Gather[batch_dims: I64(0), output_names: ["output"], input_names: ["params", "indices", "axis"]](%para7_learning_rate, %para34_global_step, I64(0))
+      : (<Ref[Tensor[Float32]], (2425), ref_key=:learning_rate>, <null>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum/learning_rate-_IteratorLearningRate)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:1019/        return self.gather(self.learning_rate, global_step, 0)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum/learning_rate-_IteratorLearningRate)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:1019/        return self.gather(self.learning_rate, global_step, 0)/
+}
+# Order:
+#   1: @mindspore_nn_optim_optimizer__IteratorLearningRate_construct_160:CNode_187{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Gather, [1]: param_learning_rate, [2]: param_global_step, [3]: ValueNode<Int64Imm> 0}
+#   2: @mindspore_nn_optim_optimizer__IteratorLearningRate_construct_160:CNode_188{[0]: ValueNode<Primitive> Return, [1]: CNode_187}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_lr_157 : 000001EC0AA40230
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:739/    def get_lr(self):/
+subgraph @get_lr_157 parent: [subgraph @get_lr_111]() {
+  %1(CNode_190) = call @get_lr_189()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:749/            if self.is_group_lr:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:749/            if self.is_group_lr:/
+}
+# Order:
+#   1: @get_lr_157:CNode_190{[0]: ValueNode<FuncGraph> get_lr_189}
+#   2: @get_lr_157:CNode_191{[0]: ValueNode<Primitive> Return, [1]: CNode_190}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: mindspore_nn_optim_momentum_Momentum_construct_163 : 000001EC48002930
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:215/    def construct(self, gradients):/
+subgraph @mindspore_nn_optim_momentum_Momentum_construct_163 parent: [subgraph @mindspore_nn_optim_momentum_Momentum_construct_82]() {
+  %1(lr) = $(mindspore_nn_optim_momentum_Momentum_construct_51):call @get_lr_61()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:222/        lr = self.get_lr()/
+  %2(CNode_116) = $(mindspore_nn_optim_momentum_Momentum_construct_82):S_Prim_Partial[side_effect_propagate: I64(1)](S_Prim_momentum_opt, S_Prim_ApplyMomentum[use_nesterov: Bool(0), use_locking: Bool(0), gradient_scale: F32(1), input_names: ["variable", "accumulation", "learning_rate", "gradient", "momentum"], output_names: ["output"], side_effect_mem: Bool(1)], %para6_momentum, %1)
+      : (<null>, <null>, <Ref[Tensor[Float32]], (), ref_key=:momentum>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:238/                success = self.hyper_map_reverse(F.partial(_momentum_opt, self.opt, self.momentum, lr),/
+  %3(gradients) = $(mindspore_nn_optim_momentum_Momentum_construct_51):call @flatten_gradients_57(%para18_gradients)
+      : (<null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:218/        gradients = self.flatten_gradients(gradients)/
+  %4(gradients) = $(mindspore_nn_optim_momentum_Momentum_construct_51):call @decay_weight_58(%3)
+      : (<null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:219/        gradients = self.decay_weight(gradients)/
+  %5(gradients) = $(mindspore_nn_optim_momentum_Momentum_construct_51):call @gradients_centralization_59(%4)
+      : (<null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:220/        gradients = self.gradients_centralization(gradients)/
+  %6(gradients) = $(mindspore_nn_optim_momentum_Momentum_construct_51):call @scale_grad_60(%5)
+      : (<null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:221/        gradients = self.scale_grad(gradients)/
+  %7(CNode_117) = $(mindspore_nn_optim_momentum_Momentum_construct_51):MakeTuple(%para3_dense.weight)
+      : (<Ref[Tensor[Float32]], (26, 1280), ref_key=:dense.weight>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:216/        params = self.params/
+  %8(CNode_118) = $(mindspore_nn_optim_momentum_Momentum_construct_51):MakeTuple(%para5_moments.dense.weight)
+      : (<Ref[Tensor[Float32]], (26, 1280), ref_key=:moments.dense.weight>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:217/        moments = self.moments/
+  %9(success) = $(mindspore_nn_optim_momentum_Momentum_construct_82):S_Prim_hyper_map(%2, %6, %7, %8, (Bool(0)), (Bool(0)))
+      : (<null>, <null>, <null>, <null>, <null>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:238/                success = self.hyper_map_reverse(F.partial(_momentum_opt, self.opt, self.momentum, lr),/
+  Return(%9)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\momentum.py:240/        return success/
+}
+# Order:
+#   1: @mindspore_nn_optim_momentum_Momentum_construct_163:CNode_192{[0]: ValueNode<Primitive> Return, [1]: success}
+
+
+subgraph attr:
+training : 1
+after_block : 1
+subgraph instance: mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167 : 000001EC0786BB20
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167 parent: [subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_65]() {
+  %1(CNode_194) = call @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:781/            if self.reduction == 'mean':/
+}
+# Order:
+#   1: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167:CNode_195{[0]: ValueNode<FuncGraph> shape_196, [1]: param_logits}
+#   2: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167:CNode_197{[0]: ValueNode<DoSignaturePrimitive> S_Prim_negative, [1]: ValueNode<Int64Imm> 1}
+#   3: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167:CNode_198{[0]: ValueNode<DoSignaturePrimitive> S_Prim_getitem, [1]: CNode_195, [2]: CNode_197}
+#   4: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167:labels{[0]: ValueNode<DoSignaturePrimitive> S_Prim_OneHot, [1]: param_labels, [2]: CNode_198, [3]: ValueNode<Tensor> Tensor(shape=[], dtype=Float32, value=1), [4]: ValueNode<Tensor> Tensor(shape=[], dtype=Float32, value=0)}
+#   5: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167:CNode_194{[0]: ValueNode<FuncGraph> mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193}
+#   6: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167:CNode_199{[0]: ValueNode<Primitive> Return, [1]: CNode_194}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_170 : 000001EC07868B50
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_170 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_137]() {
+  %1(CNode_201) = call @mindspore_nn_layer_basic_Dense_construct_200()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:628/        if self.has_bias:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:628/        if self.has_bias:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_170:CNode_201{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_200}
+#   2: @mindspore_nn_layer_basic_Dense_construct_170:CNode_202{[0]: ValueNode<Primitive> Return, [1]: CNode_201}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_weight_decay_181 : 000001EC6C4455D0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:720/    def get_weight_decay(self):/
+subgraph @get_weight_decay_181() {
+  Return(Tensor(shape=[], dtype=Float32, value=10))
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:737/        return self.weight_decay/
+}
+# Order:
+#   1: @get_weight_decay_181:CNode_203{[0]: ValueNode<Primitive> Return, [1]: ValueNode<Tensor> Tensor(shape=[], dtype=Float32, value=10)}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: decay_weight_184 : 000001EC6C447060
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:429/    def decay_weight(self, gradients):/
+subgraph @decay_weight_184 parent: [subgraph @decay_weight_104]() {
+  %1(weight_decay) = $(decay_weight_73):call @get_weight_decay_106()
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:444/            weight_decay = self.get_weight_decay()/
+  %2(CNode_153) = $(decay_weight_104):S_Prim_Partial[side_effect_propagate: I64(1)](S_Prim_apply_decay, %1)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:448/                gradients = self.map_(F.partial(_apply_decay, weight_decay), self.decay_flags, params, gradients)/
+  %3(CNode_154) = $(decay_weight_58):MakeTuple(%para3_dense.weight)
+      : (<Ref[Tensor[Float32]], (26, 1280), ref_key=:dense.weight>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:443/            params = self._parameters/
+  %4(gradients) = $(decay_weight_104):S_Prim_map(%2, (Bool(1)), %3, %para24_gradients)
+      : (<null>, <null>, <null>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:448/                gradients = self.map_(F.partial(_apply_decay, weight_decay), self.decay_flags, params, gradients)/
+  Return(%4)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:450/        return gradients/
+}
+# Order:
+#   1: @decay_weight_184:CNode_204{[0]: ValueNode<Primitive> Return, [1]: gradients}
+
+
+subgraph attr:
+skip_auto_parallel_compile : 1
+training : 1
+subgraph instance: get_lr_189 : 000001EC0AA40780
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:739/    def get_lr(self):/
+subgraph @get_lr_189 parent: [subgraph @get_lr_111]() {
+  %1(CNode_159) = $(get_lr_111):call @mindspore_nn_optim_optimizer__IteratorLearningRate_construct_160(%para4_global_step)
+      : (<Ref[Tensor[Int32]], (1), ref_key=:global_step>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:755/                lr = self.learning_rate(self.global_step).reshape(())/
+  %2(CNode_161) = $(get_lr_111):getattr(%1, "reshape")
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:755/                lr = self.learning_rate(self.global_step).reshape(())/
+  %3(lr) = $(get_lr_111):%2(())
+      : (<null>) -> (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:755/                lr = self.learning_rate(self.global_step).reshape(())/
+  Return(%3)
+      : (<null>)
+      #scope: (Default/optimizer-Momentum)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\optim\optimizer.py:756/        return lr/
+}
+# Order:
+#   1: @get_lr_189:CNode_205{[0]: ValueNode<Primitive> Return, [1]: lr}
+
+
+subgraph attr:
+subgraph instance: shape_196 : 000001EC078650E0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\ops\function\array_func.py:1484/def shape(input_x):/
+subgraph @shape_196(%para35_input_x) {
+  %1(CNode_206) = S_Prim_Shape(%para35_input_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\ops\function\array_func.py:1510/    return shape_(input_x)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\ops\function\array_func.py:1510/    return shape_(input_x)/
+}
+# Order:
+#   1: @shape_196:CNode_206{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Shape, [1]: param_input_x}
+#   2: @shape_196:CNode_207{[0]: ValueNode<Primitive> Return, [1]: CNode_206}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193 : 000001EC078670C0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:777/    def construct(self, logits, labels):/
+subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193 parent: [subgraph @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167]() {
+  %1(CNode_195) = $(mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167):call @shape_196(%para26_logits)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:784/            labels = self.one_hot(labels, F.shape(logits)[-1], self.on_value, self.off_value)/
+  %2(CNode_197) = $(mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167):S_Prim_negative(I64(1))
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:784/            labels = self.one_hot(labels, F.shape(logits)[-1], self.on_value, self.off_value)/
+  %3(CNode_198) = $(mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167):S_Prim_getitem(%1, %2)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:784/            labels = self.one_hot(labels, F.shape(logits)[-1], self.on_value, self.off_value)/
+  %4(labels) = $(mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_167):S_Prim_OneHot[axis: I64(-1), input_names: ["indices", "depth", "on_value", "off_value"], output_names: ["output"]](%para27_labels, %3, Tensor(shape=[], dtype=Float32, value=1), Tensor(shape=[], dtype=Float32, value=0))
+      : (<null>, <null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:784/            labels = self.one_hot(labels, F.shape(logits)[-1], self.on_value, self.off_value)/
+  %5(CNode_208) = S_Prim_SoftmaxCrossEntropyWithLogits(%para26_logits, %4)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:785/        x = self.softmax_cross_entropy(logits, labels)[0]/
+  %6(x) = S_Prim_getitem(%5, I64(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:785/        x = self.softmax_cross_entropy(logits, labels)[0]/
+  %7(CNode_210) = call @get_loss_209(%6)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:786/        return self.get_loss(x)/
+  Return(%7)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:786/        return self.get_loss(x)/
+}
+# Order:
+#   1: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193:CNode_208{[0]: ValueNode<DoSignaturePrimitive> S_Prim_SoftmaxCrossEntropyWithLogits, [1]: param_logits, [2]: labels}
+#   2: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_getitem, [1]: CNode_208, [2]: ValueNode<Int64Imm> 0}
+#   3: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193:CNode_210{[0]: ValueNode<FuncGraph> get_loss_209, [1]: x}
+#   4: @mindspore_nn_loss_loss_SoftmaxCrossEntropyWithLogits_construct_193:CNode_211{[0]: ValueNode<Primitive> Return, [1]: CNode_210}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_200 : 000001EC07866620
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_200 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_137]() {
+  %1(CNode_213) = call @mindspore_nn_layer_basic_Dense_construct_212()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:630/        if self.activation_flag:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:630/        if self.activation_flag:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_200:CNode_213{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_212}
+#   2: @mindspore_nn_layer_basic_Dense_construct_200:CNode_214{[0]: ValueNode<Primitive> Return, [1]: CNode_213}
+
+
+subgraph attr:
+training : 1
+subgraph instance: get_loss_209 : 000001EC07867610
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:125/    def get_loss(self, x, weights=1.0):/
+subgraph @get_loss_209(%para36_x, %para37_weights) {
+  %1(CNode_216) = call @get_loss_215()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:143/        if self.reduce and self.average:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:143/        if self.reduce and self.average:/
+}
+# Order:
+#   1: @get_loss_209:input_dtype{[0]: ValueNode<Primitive> getattr, [1]: param_x, [2]: ValueNode<StringImm> dtype}
+#   2: @get_loss_209:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Cast, [1]: param_x, [2]: ValueNode<Float> Float32}
+#   3: @get_loss_209:weights{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Cast, [1]: param_weights, [2]: ValueNode<Float> Float32}
+#   4: @get_loss_209:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Mul, [1]: weights, [2]: x}
+#   5: @get_loss_209:CNode_216{[0]: ValueNode<FuncGraph> get_loss_215}
+#   6: @get_loss_209:CNode_217{[0]: ValueNode<Primitive> Return, [1]: CNode_216}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_212 : 000001EC0786A5E0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_212 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_137]() {
+  %1(CNode_219) = call @mindspore_nn_layer_basic_Dense_construct_218()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:630/        if self.activation_flag:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:630/        if self.activation_flag:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_212:CNode_219{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_218}
+#   2: @mindspore_nn_layer_basic_Dense_construct_212:CNode_220{[0]: ValueNode<Primitive> Return, [1]: CNode_219}
+
+
+subgraph attr:
+training : 1
+subgraph instance: get_loss_215 : 000001EC07865B80
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:125/    def get_loss(self, x, weights=1.0):/
+subgraph @get_loss_215 parent: [subgraph @get_loss_209]() {
+  %1(CNode_222) = call @get_loss_221()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:144/            x = self.reduce_mean(x, self.get_axis(x))/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:144/            x = self.reduce_mean(x, self.get_axis(x))/
+}
+# Order:
+#   1: @get_loss_215:CNode_223{[0]: ValueNode<FuncGraph> get_axis_224, [1]: x}
+#   2: @get_loss_215:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_ReduceMean, [1]: x, [2]: CNode_223}
+#   3: @get_loss_215:CNode_222{[0]: ValueNode<FuncGraph> get_loss_221}
+#   4: @get_loss_215:CNode_225{[0]: ValueNode<Primitive> Return, [1]: CNode_222}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_218 : 000001EC07869B40
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_218 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_137]() {
+  %1(x_shape) = $(mindspore_nn_layer_basic_Dense_construct_97):S_Prim_Shape(%para30_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:623/        x_shape = self.shape_op(x)/
+  %2(CNode_226) = S_Prim_inner_len(%1)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:632/        if len(x_shape) != 2:/
+  %3(CNode_227) = S_Prim_not_equal(%2, I64(2))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:632/        if len(x_shape) != 2:/
+  %4(CNode_228) = Cond(%3, Bool(0))
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:632/        if len(x_shape) != 2:/
+  %5(CNode_229) = Switch(%4, @mindspore_nn_layer_basic_Dense_construct_230, @mindspore_nn_layer_basic_Dense_construct_231)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:632/        if len(x_shape) != 2:/
+  %6(CNode_232) = %5()
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:632/        if len(x_shape) != 2:/
+  %7(CNode_234) = call @mindspore_nn_layer_basic_Dense_construct_233(%6)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head)
+      # In file d:\word\summer_winter_2023\人工智能与机器学习\Important_Team_Homework\Team\lab_train.py:216/        x = self.dense(x)/
+  Return(%7)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:632/        if len(x_shape) != 2:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_218:CNode_226{[0]: ValueNode<DoSignaturePrimitive> S_Prim_inner_len, [1]: x_shape}
+#   2: @mindspore_nn_layer_basic_Dense_construct_218:CNode_227{[0]: ValueNode<DoSignaturePrimitive> S_Prim_not_equal, [1]: CNode_226, [2]: ValueNode<Int64Imm> 2}
+#   3: @mindspore_nn_layer_basic_Dense_construct_218:CNode_228{[0]: ValueNode<Primitive> Cond, [1]: CNode_227, [2]: ValueNode<BoolImm> false}
+#   4: @mindspore_nn_layer_basic_Dense_construct_218:CNode_229{[0]: ValueNode<Primitive> Switch, [1]: CNode_228, [2]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_230, [3]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_231}
+#   5: @mindspore_nn_layer_basic_Dense_construct_218:CNode_232{[0]: CNode_229}
+#   6: @mindspore_nn_layer_basic_Dense_construct_218:CNode_234{[0]: ValueNode<FuncGraph> mindspore_nn_layer_basic_Dense_construct_233, [1]: CNode_232}
+#   7: @mindspore_nn_layer_basic_Dense_construct_218:CNode_235{[0]: ValueNode<Primitive> Return, [1]: CNode_234}
+
+
+subgraph attr:
+training : 1
+subgraph instance: get_axis_224 : 000001EC078660D0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:113/    def get_axis(self, x):/
+subgraph @get_axis_224(%para38_x) {
+  %1(shape) = call @shape_196(%para38_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:120/        shape = F.shape(x)/
+  %2(length) = S_Prim_sequence_len(%1)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:121/        length = F.tuple_len(shape)/
+  %3(perm) = S_Prim_make_range(I64(0), %2)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:122/        perm = F.make_range(0, length)/
+  Return(%3)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:123/        return perm/
+}
+# Order:
+#   1: @get_axis_224:shape{[0]: ValueNode<FuncGraph> shape_196, [1]: param_x}
+#   2: @get_axis_224:length{[0]: ValueNode<DoSignaturePrimitive> S_Prim_sequence_len, [1]: shape}
+#   3: @get_axis_224:perm{[0]: ValueNode<DoSignaturePrimitive> S_Prim_make_range, [1]: ValueNode<Int64Imm> 0, [2]: length}
+#   4: @get_axis_224:CNode_236{[0]: ValueNode<Primitive> Return, [1]: perm}
+
+
+subgraph attr:
+training : 1
+subgraph instance: get_loss_221 : 000001EC07867B60
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:125/    def get_loss(self, x, weights=1.0):/
+subgraph @get_loss_221 parent: [subgraph @get_loss_215]() {
+  %1(CNode_238) = call @get_loss_237()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:145/        if self.reduce and not self.average:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:145/        if self.reduce and not self.average:/
+}
+# Order:
+#   1: @get_loss_221:CNode_238{[0]: ValueNode<FuncGraph> get_loss_237}
+#   2: @get_loss_221:CNode_239{[0]: ValueNode<Primitive> Return, [1]: CNode_238}
+
+
+subgraph attr:
+training : 1
+after_block : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_233 : 000001EC07864B90
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_233(%para39_) {
+  Return(%para39_phi_x)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:635/        return x/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_233:CNode_240{[0]: ValueNode<Primitive> Return, [1]: param_phi_x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_230 : 000001EC0786A090
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_230 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_137]() {
+  %1(x) = $(mindspore_nn_layer_basic_Dense_construct_137):S_Prim_MatMul[transpose_a: Bool(0), input_names: ["x1", "x2"], transpose_b: Bool(1), output_names: ["output"], transpose_x1: Bool(0), transpose_x2: Bool(1)](%para32_phi_x, %para3_dense.weight)
+      : (<null>, <Ref[Tensor[Float32]], (26, 1280), ref_key=:dense.weight>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:627/        x = self.matmul(x, self.weight)/
+  %2(x_shape) = $(mindspore_nn_layer_basic_Dense_construct_97):S_Prim_Shape(%para30_x)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:623/        x_shape = self.shape_op(x)/
+  %3(CNode_241) = S_Prim_negative(I64(1))
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %4(CNode_242) = S_Prim_make_slice(None, %3, None)
+      : (<null>, <null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %5(CNode_243) = S_Prim_getitem(%2, %4)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %6(CNode_244) = call @shape_196(%1)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %7(CNode_245) = S_Prim_negative(I64(1))
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %8(CNode_246) = S_Prim_getitem(%6, %7)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %9(CNode_247) = S_Prim_MakeTuple(%8)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %10(out_shape) = S_Prim_add(%5, %9)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+  %11(x) = S_Prim_Reshape[input_names: ["tensor", "shape"], output_names: ["output"]](%1, %10)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:634/            x = self.reshape(x, out_shape)/
+  Return(%11)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:633/            out_shape = x_shape[:-1] + (F.shape(x)[-1],)/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_230:CNode_241{[0]: ValueNode<DoSignaturePrimitive> S_Prim_negative, [1]: ValueNode<Int64Imm> 1}
+#   2: @mindspore_nn_layer_basic_Dense_construct_230:CNode_242{[0]: ValueNode<DoSignaturePrimitive> S_Prim_make_slice, [1]: ValueNode<None> None, [2]: CNode_241, [3]: ValueNode<None> None}
+#   3: @mindspore_nn_layer_basic_Dense_construct_230:CNode_243{[0]: ValueNode<DoSignaturePrimitive> S_Prim_getitem, [1]: x_shape, [2]: CNode_242}
+#   4: @mindspore_nn_layer_basic_Dense_construct_230:CNode_244{[0]: ValueNode<FuncGraph> shape_196, [1]: x}
+#   5: @mindspore_nn_layer_basic_Dense_construct_230:CNode_245{[0]: ValueNode<DoSignaturePrimitive> S_Prim_negative, [1]: ValueNode<Int64Imm> 1}
+#   6: @mindspore_nn_layer_basic_Dense_construct_230:CNode_246{[0]: ValueNode<DoSignaturePrimitive> S_Prim_getitem, [1]: CNode_244, [2]: CNode_245}
+#   7: @mindspore_nn_layer_basic_Dense_construct_230:CNode_247{[0]: ValueNode<DoSignaturePrimitive> S_Prim_MakeTuple, [1]: CNode_246}
+#   8: @mindspore_nn_layer_basic_Dense_construct_230:out_shape{[0]: ValueNode<DoSignaturePrimitive> S_Prim_add, [1]: CNode_243, [2]: CNode_247}
+#   9: @mindspore_nn_layer_basic_Dense_construct_230:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Reshape, [1]: x, [2]: out_shape}
+#  10: @mindspore_nn_layer_basic_Dense_construct_230:CNode_248{[0]: ValueNode<Primitive> Return, [1]: x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: mindspore_nn_layer_basic_Dense_construct_231 : 000001EC078690A0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:622/    def construct(self, x):/
+subgraph @mindspore_nn_layer_basic_Dense_construct_231 parent: [subgraph @mindspore_nn_layer_basic_Dense_construct_137]() {
+  %1(x) = $(mindspore_nn_layer_basic_Dense_construct_137):S_Prim_MatMul[transpose_a: Bool(0), input_names: ["x1", "x2"], transpose_b: Bool(1), output_names: ["output"], transpose_x1: Bool(0), transpose_x2: Bool(1)](%para32_phi_x, %para3_dense.weight)
+      : (<null>, <Ref[Tensor[Float32]], (26, 1280), ref_key=:dense.weight>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:627/        x = self.matmul(x, self.weight)/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_backbone-MobileNetV2Head/dense-Dense)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\layer\basic.py:632/        if len(x_shape) != 2:/
+}
+# Order:
+#   1: @mindspore_nn_layer_basic_Dense_construct_231:CNode_249{[0]: ValueNode<Primitive> Return, [1]: x}
+
+
+subgraph attr:
+training : 1
+subgraph instance: get_loss_237 : 000001EC078680B0
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:125/    def get_loss(self, x, weights=1.0):/
+subgraph @get_loss_237 parent: [subgraph @get_loss_215]() {
+  %1(CNode_251) = call @get_loss_250()
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:145/        if self.reduce and not self.average:/
+  Return(%1)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:145/        if self.reduce and not self.average:/
+}
+# Order:
+#   1: @get_loss_237:CNode_251{[0]: ValueNode<FuncGraph> get_loss_250}
+#   2: @get_loss_237:CNode_252{[0]: ValueNode<Primitive> Return, [1]: CNode_251}
+
+
+subgraph attr:
+training : 1
+subgraph instance: get_loss_250 : 000001EC07868600
+# In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:125/    def get_loss(self, x, weights=1.0):/
+subgraph @get_loss_250 parent: [subgraph @get_loss_215]() {
+  %1(weights) = $(get_loss_209):S_Prim_Cast[input_names: ["x", "dst_type"], output_names: ["output"]](%para37_weights, F32)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:141/        weights = self.cast(weights, mstype.float32)/
+  %2(x) = $(get_loss_209):S_Prim_Cast[input_names: ["x", "dst_type"], output_names: ["output"]](%para36_x, F32)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:140/        x = self.cast(x, mstype.float32)/
+  %3(x) = $(get_loss_209):S_Prim_Mul[input_names: ["x", "y"], output_names: ["output"]](%1, %2)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:142/        x = self.mul(weights, x)/
+  %4(CNode_223) = $(get_loss_215):call @get_axis_224(%3)
+      : (<null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:144/            x = self.reduce_mean(x, self.get_axis(x))/
+  %5(x) = $(get_loss_215):S_Prim_ReduceMean[keep_dims: Bool(0), input_names: ["input_x", "axis"], output_names: ["y"]](%3, %4)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:144/            x = self.reduce_mean(x, self.get_axis(x))/
+  %6(input_dtype) = $(get_loss_209):getattr(%para36_x, "dtype")
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:139/        input_dtype = x.dtype/
+  %7(x) = S_Prim_Cast[input_names: ["x", "dst_type"], output_names: ["output"]](%5, %6)
+      : (<null>, <null>) -> (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:147/        x = self.cast(x, input_dtype)/
+  Return(%7)
+      : (<null>)
+      #scope: (Default/network-WithLossCell/_loss_fn-SoftmaxCrossEntropyWithLogits)
+      # In file D:\aconda\minaconda\envs\mind\lib\site-packages\mindspore\nn\loss\loss.py:148/        return x/
+}
+# Order:
+#   1: @get_loss_250:x{[0]: ValueNode<DoSignaturePrimitive> S_Prim_Cast, [1]: x, [2]: input_dtype}
+#   2: @get_loss_250:CNode_253{[0]: ValueNode<Primitive> Return, [1]: x}
+
+

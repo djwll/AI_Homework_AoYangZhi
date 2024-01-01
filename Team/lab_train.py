@@ -45,11 +45,11 @@ config = EasyDict({
     "image_width": 224,
     "batch_size": 24, # 鉴于CPU容器性能，太大可能会导致训练卡住
     "eval_batch_size": 10,
-    "epochs": 4, # 请尝试修改以提升精度
-    "lr_max": 0.01, # 请尝试修改以提升精度
-    "decay_type": 'constant', # 请尝试修改以提升精度
-    "momentum": 0.8, # 请尝试修改以提升精度
-    "weight_decay": 3.0, # 请尝试修改以提升精度
+    "epochs": 10, # 请尝试修改以提升精度
+    "lr_max": 0.1, # 请尝试修改以提升精度
+    "decay_type": 'square', # 请尝试修改以提升精度
+    "momentum": 0.9, # 请尝试修改以提升精度
+    "weight_decay": 0.001, # 请尝试修改以提升精度
     "dataset_path": "./datasets/5fbdf571c06d3433df85ac65-momodel/garbage_26x100",
     "features_path": "./results/garbage_26x100_features", # 临时目录，保存冻结层Feature Map，可随时删除
     "class_index": index,
@@ -100,12 +100,16 @@ def build_lr(total_steps, lr_init=0.0, lr_end=0.0, lr_max=0.1, warmup_steps=0, d
         if i < warmup_steps:
             lr = lr_init + inc_per_step * (i + 1)
         else:
+            #这里可以更改相应的下降策略
             if decay_type == 'cosine':
                 cosine_decay = 0.5 * (1 + math.cos(math.pi * (i - warmup_steps) / decay_steps))
                 lr = (lr_max - lr_end) * cosine_decay + lr_end
             elif decay_type == 'square':
                 frac = 1.0 - float(i - warmup_steps) / (total_steps - warmup_steps)
                 lr = (lr_max - lr_end) * (frac * frac) + lr_end
+            elif decay_type == "exponential":
+                exponential_decay = 1e-4**(total_steps/decay_steps)
+                lr = (lr_max - lr_end) * exponential_decay + lr_end
             else:
                 lr = lr_max
         lr_all_steps.append(lr)
@@ -191,25 +195,43 @@ class MobileNetV2Head(nn.Cell):
         >>> MobileNetV2Head(num_classes=1000)
     """
 
-    def __init__(self, input_channel=1280, hw=7, num_classes=1000, reduction='mean', activation="None"):
+    def __init__(self, input_channel=1280, hw=7, num_classes=1000, reduction='mean', activation="none"):
         super(MobileNetV2Head, self).__init__()
         if reduction:
             self.flatten = GlobalPooling(reduction)
         else:
             self.flatten = nn.Flatten()
             input_channel = input_channel * hw * hw
-        
-        self.dense = nn.Dense(input_channel, num_classes, weight_init='ones', has_bias=False)
+        #参数可调
+        hide=512
+        self.dense1 = nn.Dense(input_channel, hide, weight_init='ones', has_bias=False)
+        self.dense2 = nn.Dense(hide, num_classes, weight_init='ones', has_bias=False)
+        self.bn = nn.BatchNorm1d(num_classes)
+        self.softmax = nn.Softmax()
+        #参数可调
+        dropout_rate = 0.5
+        self.dropout = nn.Dropout(p=dropout_rate)
         if activation == "Sigmoid":
             self.activation = nn.Sigmoid()
+            self.need_activation = True
+           
         elif activation == "Softmax":
             self.activation = nn.Softmax()
+            self.need_activation = True
+            
+        elif activation == "Tanh":
+            self.activation = nn.Tanh()
+            
         else:
             self.need_activation = False
 
     def construct(self, x):
         x = self.flatten(x)
-        x = self.dense(x)
+        x = self.dense1(x)
+        x = self.softmax(x)
+        x = self.dense2(x)
+        x = self.dropout(x)
+        x = self.bn(x)
         if self.need_activation:
             x = self.activation(x)
         return x
@@ -224,7 +246,7 @@ def train_head():
     for param in backbone.get_parameters():
        param.requires_grad = False
     load_checkpoint(config.pretrained_ckpt, net=backbone)
-
+    #加入激活函数
     head = MobileNetV2Head(input_channel=backbone.out_channels, num_classes=config.num_classes, reduction=config.reduction)
     network = mobilenet_v2(backbone, head)
 
